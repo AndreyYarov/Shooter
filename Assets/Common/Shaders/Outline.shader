@@ -50,7 +50,7 @@
 				v2f o;
 				o.pos = UnityObjectToClipPos(v.vertex);
 				o.uv = TRANSFORM_TEX(v.texcoord, _MainTex);
-				o.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;	
+				o.worldPos = mul(unity_ObjectToWorld, v.vertex);	
 				o.worldNormal = UnityObjectToWorldNormal(v.normal);
 				return o;
 			}
@@ -60,7 +60,7 @@
 				fixed3 worldViewDir = normalize(UnityWorldSpaceViewDir(i.worldPos));
 				fixed t = 1 - dot(i.worldNormal, worldViewDir);
 				fixed4 c;
-				c.rgb = tex2D(_MainTex, i.uv.xy).rgb * _Color;
+				c.rgb = tex2D(_MainTex, i.uv) * _Color;
 				c.a = pow(t, 1 / _Outline);
 				return c;
 			}
@@ -83,7 +83,7 @@
 				v2f o;
 				o.pos = UnityObjectToClipPos(v.vertex);
 				o.uv = TRANSFORM_TEX(v.texcoord, _MainTex);
-				o.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
+				o.worldPos = mul(unity_ObjectToWorld, v.vertex);
 				o.worldNormal = UnityObjectToWorldNormal(v.normal);
 				return o;
 			}
@@ -92,7 +92,7 @@
 				fixed3 lightDir = normalize(UnityWorldSpaceLightDir(i.worldPos));
 				fixed diff = max(0, dot (i.worldNormal, lightDir));
 				fixed4 c;
-				c.rgb = tex2D(_MainTex, i.uv) * _Color * _LightColor0.rgb * diff;
+				c.rgb = tex2D(_MainTex, i.uv) * _Color * _LightColor0 * diff;
 				c.a = 1;
 				return c;
 			}

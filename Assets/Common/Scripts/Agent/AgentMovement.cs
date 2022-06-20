@@ -11,7 +11,7 @@ namespace Shooter.Agent
         private Vector3 right;
         private Vector3 left;
 
-        void Start()
+        void OnEnable()
         {
             if (m_Speed > 0f && m_Agent && NavMesh.SamplePosition(transform.position, out var hit, 1f, NavMesh.AllAreas))
             {

@@ -10,39 +10,75 @@ namespace Shooter.Utils.Pool
         private static Transform inactiveParent;
         private static Dictionary<Type, ObjectPool> pools;
 
-        private Stack<Object> inactiveInstances = new Stack<Object>();
+        /// <summary>
+        /// Key - origin or null,
+        /// Value - stack of inactive objects
+        /// </summary>
+        private Dictionary<Object, Stack<Object>> inactive = new Dictionary<Object, Stack<Object>>();
+        /// <summary>
+        /// Key - instance,
+        /// Value - original prefab
+        /// </summary>
+        private Dictionary<Object, Object> origins = new Dictionary<Object, Object>();
+        private Stack<Object> inactiveWithoutOrigins = new Stack<Object>();
 
-        public static T Instantiate<T>(T origin, Vector3 position, Quaternion rotation, Transform parent) where T : PoolBehaviour<T>
+        private static ObjectPool GetPool(Type type)
         {
-            T beh;
-            if (pools != null && pools.TryGetValue(typeof(T), out var pool) && pool.inactiveInstances.TryPop(out Object obj))
-            {
-                beh = (T)obj;
-                beh.transform.SetParent(parent);
-                beh.transform.SetPositionAndRotation(position, rotation);
-            }
-            else
-                beh = Object.Instantiate(origin, position, rotation, parent);
-            beh.Init();
-            return beh;
-        }
-
-        public static void Destroy<T>(T beh) where T : PoolBehaviour<T>
-        {
+            ObjectPool pool;
             if (!inactiveParent)
             {
                 inactiveParent = new GameObject("Object-Pool").transform;
                 inactiveParent.gameObject.SetActive(false);
-                pools = new Dictionary<Type, ObjectPool>();
+                pool = new ObjectPool();
+                pools = new Dictionary<Type, ObjectPool> { { type, pool } };
             }
-            if (!pools.TryGetValue(typeof(T), out var pool))
+            else if (!pools.TryGetValue(type, out pool))
             {
                 pool = new ObjectPool();
-                pools.Add(typeof(T), pool);
+                pools.Add(type, pool);
             }
-            beh.Deinit();
-            beh.transform.SetParent(inactiveParent);
-            pool.inactiveInstances.Push(beh);
+            return pool;
+        }
+
+        public static T Instantiate<T>(T origin, Vector3 position, Quaternion rotation, Transform parent) where T : Object
+        {
+            var pool = GetPool(typeof(T));
+            Stack<Object> stack;
+            if (origin)
+                pool.inactive.TryGetValue(origin, out stack);
+            else
+                stack = pool.inactiveWithoutOrigins;
+            if (stack != null && stack.TryPop(out var obj) && obj is T instance)
+            {
+                if (instance is not GameObject go)
+                    go = (instance as Component).gameObject;
+                go.transform.SetParent(parent);
+                go.transform.SetPositionAndRotation(position, rotation);
+            }
+            else
+            {
+                instance = Object.Instantiate(origin, position, rotation, parent);
+                pool.origins.Add(instance, origin);
+            }
+            return instance;
+        }
+
+        public static void Deactivate<T>(T instance) where T : Object
+        {
+            var pool = GetPool(typeof(T));
+            if (instance is not GameObject go)
+                go = (instance as Component).gameObject;
+            go.transform.SetParent(inactiveParent);
+            pool.origins.TryGetValue(instance, out var origin);
+            Stack<Object> stack;
+            if (!origin)
+                stack = pool.inactiveWithoutOrigins;
+            else if (!pool.inactive.TryGetValue(origin, out stack))
+            {
+                stack = new Stack<Object>();
+                pool.inactive.Add(origin, stack);
+            }
+            stack.Push(instance);
         }
     }
 }

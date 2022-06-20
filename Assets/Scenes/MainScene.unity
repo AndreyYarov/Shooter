@@ -122,7 +122,7 @@ NavMeshSettings:
     preserveTilesOutsideBounds: 0
     debug:
       m_Flags: 0
-  m_NavMeshData: {fileID: 0}
+  m_NavMeshData: {fileID: 23800000, guid: 9b20f301ecce4a54bbb94d523a98802b, type: 2}
 --- !u!1001 &55826302
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -196,6 +196,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Agent (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 3039028194835990177, guid: c18c42de2fcf87543af97492eebf302a, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8844277115502689242, guid: c18c42de2fcf87543af97492eebf302a, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -262,7 +266,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!108 &705507994
 Light:
@@ -611,6 +615,10 @@ PrefabInstance:
     - target: {fileID: 5874625767105393951, guid: 9c6aa4b01f6a93343b48b3e2a5717371, type: 3}
       propertyPath: m_Name
       value: Environment
+      objectReference: {fileID: 0}
+    - target: {fileID: 7159744477576599785, guid: 9c6aa4b01f6a93343b48b3e2a5717371, type: 3}
+      propertyPath: m_NavMeshLayer
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9c6aa4b01f6a93343b48b3e2a5717371, type: 3}

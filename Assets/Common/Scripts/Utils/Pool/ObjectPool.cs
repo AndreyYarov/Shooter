@@ -52,8 +52,8 @@ namespace Shooter.Utils.Pool
             {
                 if (instance is not GameObject go)
                     go = (instance as Component).gameObject;
-                go.transform.SetParent(parent);
                 go.transform.SetPositionAndRotation(position, rotation);
+                go.transform.SetParent(parent);
             }
             else
             {

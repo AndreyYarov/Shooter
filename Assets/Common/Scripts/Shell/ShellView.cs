@@ -11,6 +11,7 @@ namespace Shooter.Shell
         [SerializeField] private Rigidbody m_Rigidbody;
         [SerializeField] private float m_DestroyY = -10f;
         [SerializeField] private float m_AimDistance = 10f;
+        [SerializeField] private float m_MaxSpeed = 50f;
 
         [Header("Visual effects")]
         [SerializeField] private ParticleSystem m_ExplosionOnGround;
@@ -21,19 +22,17 @@ namespace Shooter.Shell
         public void Init(Vector3 dir, Ray targetRay, Func<Collider, bool> OnHit)
         {
             float p = Mathf.Sqrt(dir.x * dir.x + dir.z * dir.z);
+            float v0;
             if (p == 0)
-            {
-                float v0 = Mathf.Sqrt(-2f * Physics.gravity.y * m_AimDistance);
-                m_Rigidbody.velocity = dir * v0;
-            }
+                v0 = Mathf.Sqrt(-2f * Physics.gravity.y * m_AimDistance);
             else
             {
                 float vt = 10 / p;
                 Vector3 dst = targetRay.origin + targetRay.direction * vt;
                 float t = Mathf.Sqrt((transform.position.y - dst.y + dir.y * vt) * (-2f / Physics.gravity.y));
-                float v0 = vt / t;
-                m_Rigidbody.velocity = dir * v0;
+                v0 = vt / t;
             }
+            m_Rigidbody.velocity = dir * Mathf.Min(v0, m_MaxSpeed);
 
             OnHitCallback = OnHit;
         }
@@ -55,7 +54,7 @@ namespace Shooter.Shell
             {
                 OnHitCallback = null;
                 if (other.bounds.max.y <= GroundDetectionDistance)
-                    ObjectPool.Instantiate(m_ExplosionOnGround, new Vector3(transform.position.x, 0f, transform.position.z), Quaternion.identity, null);
+                    ObjectPool.Instantiate(m_ExplosionOnGround, PrevPosition, Quaternion.identity, null);
                 else
                     ObjectPool.Instantiate(m_ExplosionUpperGround, PrevPosition, Quaternion.identity, null);
                 ObjectPool.Deactivate(this);

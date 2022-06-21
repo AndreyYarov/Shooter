@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using Shooter.Shell;
 using Shooter.Utils.Pool;
@@ -6,18 +7,24 @@ namespace Shooter.Player
 {
     public class PlayerAttack : MonoBehaviour
     {
-        [SerializeField] private UI.Aim m_Aim;
         [SerializeField] private Transform m_FireSource;
         [SerializeField] private Camera m_MainCamera;
         [SerializeField] private ShellView m_ShellPrefab;
+
+        private Action<bool> SetAimStateCallback;
+
+        public void Init(Action<bool> SetAimState)
+        {
+            SetAimStateCallback = SetAimState;
+        }
 
         private void Update()
         {
             Ray ray = m_MainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f));
             if (Physics.Raycast(ray, out var hitInfo) && hitInfo.collider.CompareTag("NPC"))
-                m_Aim.Active = true;
+                SetAimStateCallback?.Invoke(true);
             else
-                m_Aim.Active = false;
+                SetAimStateCallback?.Invoke(false);
             if (Input.GetMouseButtonDown(0))
             {
                 var shell = ObjectPool.Instantiate(m_ShellPrefab, m_FireSource.position, Quaternion.identity, null);

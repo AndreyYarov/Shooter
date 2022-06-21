@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 namespace Shooter.UI
 {
-    public class Aim : MonoBehaviour
+    class Aim : MonoBehaviour
     {
         [SerializeField] private Image m_Aim;
         [SerializeField] private Color m_InactiveColor;

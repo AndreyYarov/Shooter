@@ -114,7 +114,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!114 &9013218665051357236
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -129,6 +129,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Rigidbody: {fileID: 1064750205074937561}
   m_DestroyY: -10
-  m_Speed: 5
+  m_AimDistance: 10
+  m_MaxSpeed: 50
   m_ExplosionOnGround: {fileID: 19834770, guid: 866a4ac022f2a8e46b9f482d65401a64, type: 3}
   m_ExplosionUpperGround: {fileID: 19842296, guid: a0040bf7072bc2f4e82d887d50a9c5e2, type: 3}

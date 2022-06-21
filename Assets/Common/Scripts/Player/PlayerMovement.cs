@@ -7,6 +7,7 @@ namespace Shooter.Player
         [SerializeField] private float m_Speed = 5f;
         [SerializeField] private float m_RotationSpeed = 180f;
         [SerializeField] private Transform m_CameraContainer;
+        [SerializeField] private Rigidbody m_Rigidbody;
 
         private float cameraAngle = 0f;
 
@@ -29,6 +30,13 @@ namespace Shooter.Player
                 cameraAngle = newCameraAngle;
                 m_CameraContainer.localRotation = Quaternion.Euler(cameraAngle, 0f, 0f);
             }
+        }
+
+        public void HitPlayer(Vector3 position, float force)
+        {
+            Vector3 dir = transform.position - position;
+            dir.y = 0f;
+            m_Rigidbody.AddForce(dir.normalized * force, ForceMode.Impulse);
         }
     }
 }

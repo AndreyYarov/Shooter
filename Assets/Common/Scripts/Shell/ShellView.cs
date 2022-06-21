@@ -38,6 +38,8 @@ namespace Shooter.Shell
             OnHitCallback = OnHit;
         }
 
+        public Vector3 PrevPosition => transform.position - m_Rigidbody.velocity * Time.fixedDeltaTime;
+
         private void Update()
         {
             if (transform.position.y <= m_DestroyY)
@@ -55,7 +57,7 @@ namespace Shooter.Shell
                 if (other.bounds.max.y <= GroundDetectionDistance)
                     ObjectPool.Instantiate(m_ExplosionOnGround, new Vector3(transform.position.x, 0f, transform.position.z), Quaternion.identity, null);
                 else
-                    ObjectPool.Instantiate(m_ExplosionUpperGround, transform.position - m_Rigidbody.velocity * Time.fixedDeltaTime, Quaternion.identity, null);
+                    ObjectPool.Instantiate(m_ExplosionUpperGround, PrevPosition, Quaternion.identity, null);
                 ObjectPool.Deactivate(this);
             }
         }

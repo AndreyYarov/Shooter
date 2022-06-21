@@ -81,6 +81,7 @@ MonoBehaviour:
   m_Speed: 5
   m_RotationSpeed: 240
   m_CameraContainer: {fileID: 354956961965800763}
+  m_Rigidbody: {fileID: 354956961714635927}
 --- !u!114 &8496250248625442423
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -97,7 +98,6 @@ MonoBehaviour:
   m_FireSource: {fileID: 124638504505181162}
   m_MainCamera: {fileID: 354956961965800764}
   m_ShellPrefab: {fileID: 9013218665051357236, guid: 8c3503052614c6c4ba40f5a4a19f3242, type: 3}
-  m_AimDistance: 10
 --- !u!1 &354956961965800766
 GameObject:
   m_ObjectHideFlags: 0

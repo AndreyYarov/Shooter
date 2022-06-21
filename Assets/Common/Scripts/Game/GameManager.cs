@@ -29,18 +29,27 @@ namespace Shooter.Game
             m_Player.transform.SetPositionAndRotation(_playerSpawnPosition, Quaternion.identity);
             m_Player.Init(Finish, Fail);
             m_EnemiesManager.PlaceAgents(m_Player.gameObject, m_Player.HitPlayer);
+
+            UnityEngine.Debug.Log("Старт игры");
         }
 
         private void Finish()
         {
+            if (m_EnemiesManager.HaveActiveAgents())
+                return;
+
             m_UI.SetGameState(GameState.Finish);
             DeactivatePlayer();
+
+            UnityEngine.Debug.Log("Победа");
         }
 
         private void Fail()
         {
             m_UI.SetGameState(GameState.Fail);
             DeactivatePlayer();
+
+            UnityEngine.Debug.Log("Фейл");
         }
 
         private void DeactivatePlayer()

@@ -29,6 +29,8 @@ namespace Shooter.Player
             {
                 var shell = ObjectPool.Instantiate(m_ShellPrefab, m_FireSource.position, Quaternion.identity, null);
                 shell.Init(m_FireSource.up, ray, Hit);
+
+                UnityEngine.Debug.Log("Выстрел");
             }
         }
 
@@ -37,7 +39,11 @@ namespace Shooter.Player
             if (c.gameObject == this || c.transform.IsChildOf(transform))
                 return false;
             if (c.CompareTag("NPC"))
+            {
                 ObjectPool.Deactivate(c.gameObject);
+
+                UnityEngine.Debug.Log("Попадание в агента");
+            }
             return true;
         }
     }

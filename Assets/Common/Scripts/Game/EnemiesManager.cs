@@ -12,6 +12,14 @@ namespace Shooter.Game
         [SerializeField] private Vector3[] m_EnemyPositions = new Vector3[0];
 
         private GameObject[] enemies;
+
+        public bool HaveActiveAgents()
+        {
+            foreach (var go in enemies)
+                if (go.activeInHierarchy)
+                    return true;
+            return false;
+        }
         
         public void PlaceAgents(GameObject player, Action<Vector3, float> OnPlayerHitCallback)
         {
